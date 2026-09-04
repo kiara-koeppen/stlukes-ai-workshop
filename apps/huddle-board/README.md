@@ -17,6 +17,17 @@ the South Clinic (Nampa) morning triage huddle for `huddle_date = 2026-09-15`.
    table `kk_test.huddle.physician_inputs`** via an `INSERT` on the SQL warehouse.
 3. **Huddle Board** - patients grouped by `assigned_team_member` with complexity,
    assignment balance across providers, and optimal-vs-assigned mismatches.
+4. **AI-suggested assignments** (future-state) - a "Suggest assignments" action
+   on the Huddle Board calls
+   `ai_query('databricks-meta-llama-3-3-70b-instruct', ...)` live on the SQL
+   warehouse, once per patient. The prompt is built from the patient's
+   AI-extracted transcript factors, the provider roster, and any existing
+   relationship scores, and the model returns a recommended provider + a
+   one-line rationale. These are shown as **suggestions the physician can
+   override** - the physician's actual assignment still writes to
+   `physician_inputs` on the Physician Input tab. This realizes the "ML/AI picks
+   which patients should be seen by which provider" future-state in the huddle
+   brief.
 
 ## Architecture
 

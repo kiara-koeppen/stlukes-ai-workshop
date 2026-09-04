@@ -40,6 +40,9 @@ T_DEMO = f"{CATALOG}.{SCHEMA}.patient_demographics"
 T_AIEXT = f"{CATALOG}.{SCHEMA}.transcript_ai_extractions"
 T_INPUTS = f"{CATALOG}.{SCHEMA}.physician_inputs"
 
+# Foundation model endpoint for the AI-suggested provider assignment.
+AI_MODEL = "databricks-meta-llama-3-3-70b-instruct"
+
 st.set_page_config(
     page_title="AI Huddle Management | St. Luke's",
     page_icon="🩺",
@@ -149,6 +152,60 @@ def load_providers() -> pd.DataFrame:
         ORDER BY provider_name
         """
     )
+
+
+@st.cache_data(ttl=600, show_spinner=False)
+def load_ai_suggestions() -> pd.DataFrame:
+    """Live ai_query call per patient: recommend a provider + one-line rationale.
+
+    Future-state from the huddle brief ("AI picks which patients should be seen
+    by which provider"). Runs on the SQL warehouse; the prompt is built from each
+    patient's AI-extracted transcript factors + the provider roster + any existing
+    relationship scores in physician_inputs. Returned as a *suggestion* the
+    physician can override; actual assignments still write to physician_inputs.
+    """
+    df = run_query(
+        f"""
+        WITH rel AS (
+          SELECT pat_id,
+                 concat_ws(', ', collect_list(
+                   concat(provider_name, ' rel=',
+                          cast(provider_patient_relationship_score AS string)))) AS rels
+          FROM {T_INPUTS}
+          WHERE huddle_date = DATE'{HUDDLE_DATE}'
+          GROUP BY pat_id
+        )
+        SELECT d.pat_id,
+               d.pat_name,
+               ai_query('{AI_MODEL}',
+                 concat(
+                   'You are triaging a primary care morning huddle at South Clinic (Nampa). ',
+                   'Available providers: HILL, JEFFREY O; DOYLE, ERICA D; FOWLER, ANGEL M. ',
+                   'Patient factors -- visit complexity: ', coalesce(x.visit_complexity_projection, 'n/a'),
+                   '; psychosocial complexity: ', coalesce(x.psychosocial_complexity_projection, 'n/a'),
+                   '; SDOH: ', coalesce(x.social_determinants_of_health, 'n/a'),
+                   '; relationship context: ', coalesce(x.relationship_context, 'n/a'),
+                   '. Existing provider-patient relationship scores (-10..10): ',
+                   coalesce(r.rels, 'none'),
+                   '. Recommend exactly one provider to see this patient. ',
+                   'Respond in ONE line as: PROVIDER NAME :: one-sentence rationale.'
+                 )
+               ) AS suggestion
+        FROM {T_DEMO} d
+        LEFT JOIN {T_AIEXT} x ON d.pat_id = x.pat_id
+        LEFT JOIN rel r ON d.pat_id = r.pat_id
+        WHERE d.huddle_date = DATE'{HUDDLE_DATE}'
+        ORDER BY d.pat_name
+        """
+    )
+    # Parse "PROVIDER :: rationale" into two columns.
+    if not df.empty:
+        parts = df["suggestion"].fillna("").str.split("::", n=1, expand=True)
+        df["ai_provider"] = parts[0].str.strip()
+        df["ai_rationale"] = (
+            parts[1].str.strip() if parts.shape[1] > 1 else ""
+        )
+    return df
 
 
 def insert_physician_input(row: dict) -> None:
@@ -305,6 +362,45 @@ with tab_input:
 with tab_board:
     st.subheader("Organized huddle board")
     st.caption("Patients grouped by assigned team member, highest complexity first.")
+
+    # ---- AI-suggested provider assignments (future-state) -----------------
+    st.markdown("#### 🤖 AI-suggested assignments")
+    st.caption(
+        f"Live `ai_query('{AI_MODEL}')` over each patient's AI-extracted factors, "
+        "the provider roster, and existing relationship scores. These are "
+        "**suggestions only** - the physician chooses the actual assignment on "
+        "the Physician Input tab."
+    )
+    sc1, sc2 = st.columns([1, 3])
+    with sc1:
+        if st.button("✨ Suggest assignments", type="secondary"):
+            load_ai_suggestions.clear()
+            st.session_state["show_ai_suggestions"] = True
+    if st.session_state.get("show_ai_suggestions"):
+        try:
+            with st.spinner("Asking the model to recommend a provider per patient..."):
+                sugg = load_ai_suggestions()
+        except Exception as e:  # noqa: BLE001
+            st.error(f"AI suggestion failed: {e}")
+            sugg = pd.DataFrame()
+        if not sugg.empty:
+            st.dataframe(
+                sugg[["pat_name", "ai_provider", "ai_rationale"]].rename(
+                    columns={
+                        "pat_name": "Patient",
+                        "ai_provider": "AI suggested provider",
+                        "ai_rationale": "Rationale",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(
+                "⚠️ AI recommendation for physician review - not an automatic "
+                "assignment. Override on the Physician Input tab as needed."
+            )
+
+    st.divider()
 
     if st.button("🔄 Refresh board"):
         load_inputs.clear()
