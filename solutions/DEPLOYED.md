@@ -32,3 +32,19 @@ Live IDs + verification status for the facilitator answer-key build. Rebuildable
 ## Genie build recipe (MCP is broken here; use REST via CLI)
 - Create: `POST /api/2.0/data-rooms/` with {display_name, warehouse_id, table_identifiers[], run_as_type:"VIEWER", description}
 - Verify live: `uv run --with requests --python 3.11 python solutions/_tools/genie_ask.py <space_id> "<question>"`
+
+## Update (2026-09-04): AI Functions + Dashboards done
+
+AI Functions (all verified on real rows):
+- CKD: `kk_test.clinical.notes_ckd_signals` (ai_query note extraction, 102/102 precise)
+- HTM: `kk_test.htm.work_order_forecast` (ai_forecast; ~480 corrective WOs/mo, bounds 428-542)
+- Diversion: `kk_test.med_diversion.investigation_narratives` (ai_query peer-benchmarked narratives, top 5)
+- Huddle: `kk_test.huddle.transcript_ai_extractions` (ai_query from transcripts, 18/18 parsed)
+
+AI/BI Dashboards (deployed + verified live, SQL tested first):
+- CKD:       `01f1a88db2fc1a5f843fe617311b5cc2`  (solutions/01-ckd/03_dashboard.lvdash.json)
+- Diversion: `01f1a88db3721dc383ea706b9d78854a`  (solutions/02-diversion/03_dashboard.lvdash.json)
+- HTM:       `01f1a88db3bd1c3aa3cd2fed66b243b2`  (solutions/03-htm/03_dashboard.lvdash.json)
+- Huddle:    `01f1a88db4291b848e5cdd4e4e0fc880`  (solutions/04-huddle/03_dashboard.lvdash.json)
+
+REMAINING: Apps (CKD clinician-review + Huddle huddle-board w/ Lakebase prod path priority); guides x4; Google Doc demo script; final verification; GitHub push.
