@@ -1,0 +1,7 @@
+# Real SLHS source material — de-identified but internal (provider names, stakeholder names, briefs). Never commit.
+source-materials/
+# scratch
+*.tmp
+__pycache__/
+.DS_Store
+.venv/
