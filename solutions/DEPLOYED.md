@@ -48,3 +48,17 @@ AI/BI Dashboards (deployed + verified live, SQL tested first):
 - Huddle:    `01f1a88db4291b848e5cdd4e4e0fc880`  (solutions/04-huddle/03_dashboard.lvdash.json)
 
 REMAINING: Apps (CKD clinician-review + Huddle huddle-board w/ Lakebase prod path priority); guides x4; Google Doc demo script; final verification; GitHub push.
+
+## Update (2026-09-04): Databricks Apps (deployed + browser-verified)
+
+- **CKD clinician-review** (RUNNING): https://ckd-clinician-review-669602668219382.2.azure.databricksapps.com
+  KPI tiles (1,524 / 500 / 230 / 32.8%), 500-patient risk-sorted care-gap worklist w/ filters,
+  patient review + AI note signal, **live ai_query "Draft nephrology referral + problem-list update"**
+  (browser-verified: real draft generated in 6.6s for ACO-X3B0FQGM9NB), **human-in-the-loop writeback**
+  to kk_test.clinical.ckd_review_actions, Ask-Genie box. Screenshots in apps/ckd-clinician-review/.
+- **huddle-board** (RUNNING): https://huddle-board-669602668219382.2.azure.databricksapps.com
+  18-patient list w/ AI-extracted factors, physician input form -> Delta writeback (physician_inputs),
+  huddle board grouped by provider, **AI-suggested provider assignments** (ai_query per patient,
+  verified for all 18). Lakebase documented as prod path. Screenshot in apps/huddle-board/.
+- Both browser-verified live via the authorized Chrome session (SSO satisfied). HTM + Diversion do not
+  have dedicated apps (their Genie Agent + AI/BI dashboard are the interactive surfaces).
