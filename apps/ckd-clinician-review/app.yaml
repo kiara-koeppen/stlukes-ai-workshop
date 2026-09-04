@@ -1,0 +1,12 @@
+command:
+  - "streamlit"
+  - "run"
+  - "app.py"
+
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: CKD_GENIE_SPACE_ID
+    value: "01f1a88b5c6613f9ad5a4383a3b81a6b"
+  - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+    value: "false"
