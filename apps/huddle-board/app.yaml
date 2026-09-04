@@ -1,0 +1,11 @@
+command:
+  - streamlit
+  - run
+  - app.py
+
+env:
+  # SQL warehouse for reads + the physician-input writeback.
+  # Bound to the "sql-warehouse" app resource; falls back to the workshop
+  # warehouse id in code if the resource is not attached.
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
