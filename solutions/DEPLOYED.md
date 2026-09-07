@@ -62,3 +62,22 @@ REMAINING: Apps (CKD clinician-review + Huddle huddle-board w/ Lakebase prod pat
   verified for all 18). Lakebase documented as prod path. Screenshot in apps/huddle-board/.
 - Both browser-verified live via the authorized Chrome session (SSO satisfied). HTM + Diversion do not
   have dedicated apps (their Genie Agent + AI/BI dashboard are the interactive surfaces).
+
+## Update (2026-09-07): HTM + Diversion apps, doc volumes, loader smoke-tested
+
+Now 4 dedicated apps (all ACTIVE + browser-verified):
+- htm-equipment-planner: https://htm-equipment-planner-669602668219382.2.azure.databricksapps.com
+  (capital replacement-planning cart, budget vs cost, save plan -> kk_test.htm.replacement_plans; ai_query rationale + Ask-Genie)
+- diversion-investigator: https://diversion-investigator-669602668219382.2.azure.databricksapps.com
+  (watchlist [4 planted diverters top], anomaly-vs-peer breakdown, live ai_query narrative, case writeback -> kk_test.med_diversion.investigation_cases)
+
+Genie-on-Volumes doc volumes (for the user to attach in the UI):
+- kk_test.med_diversion.policy_docs (4 policy/SOP PDFs) -> Diversion Genie 01f1a88ca9ab13638e9123eb9a0edf4b
+- kk_test.htm.vendor_bulletins (4 vendor EOL bulletins) -> HTM Genie 01f1a88ca93e134ca8dec9628062762b
+- kk_test.clinical.clinical_notes_files -> CKD Genie 01f1a88b5c6613f9ad5a4383a3b81a6b (optional)
+- kk_test.huddle.transcripts -> Huddle Genie 01f1a88caa171f01b6a7ad343d28dfe3 (optional)
+
+LOADER SMOKE TEST (setup/00_load_all_data.py): ran the full loader path into a fresh scratch catalog (main):
+all 10 base tables loaded from repo CSVs with exact row counts + all 4 metric views MEASURE-verified,
+then scratch schemas dropped. CAUGHT + FIXED a real bug: metric-view step split on ';' but comment
+headers contain ';' ("kk_test here; swap to..."); fixed by stripping '--' lines before split.
