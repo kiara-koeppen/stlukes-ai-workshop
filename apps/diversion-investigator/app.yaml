@@ -1,0 +1,16 @@
+command:
+  - streamlit
+  - run
+  - app.py
+
+env:
+  # SQL warehouse for reads + the investigation-case writeback.
+  # Bound to the "sql-warehouse" app resource.
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: DIVERSION_GENIE_SPACE_ID
+    value: "01f1a88ca9ab13638e9123eb9a0edf4b"
+  - name: DIVERSION_LLM_ENDPOINT
+    value: "databricks-meta-llama-3-3-70b-instruct"
+  - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+    value: "false"

@@ -223,8 +223,11 @@ mv_files = [
 for path in mv_files:
     with open(path) as fh:
         ddl = fh.read().replace("kk_test", catalog)
-    # execute each statement (files may have a leading comment block; split on the CREATE)
-    for stmt in [s.strip() for s in ddl.split(";") if "CREATE" in s.upper()]:
+    # Strip full-line "--" comments BEFORE splitting: the comment headers contain semicolons
+    # (e.g. "Catalog is kk_test here; swap to healthcare_ai"), which would otherwise break a
+    # naive split(";") and leave an unparseable fragment. Each file holds exactly one statement.
+    no_comments = "\n".join(l for l in ddl.splitlines() if not l.strip().startswith("--"))
+    for stmt in [s.strip() for s in no_comments.split(";") if s.strip()]:
         spark.sql(stmt)
     print("metric view applied from", path.split("/")[-2])
 
