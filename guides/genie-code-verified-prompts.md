@@ -1,5 +1,11 @@
 # Genie Code — Verified Prompts & Gotchas
 
+> **This file is the working engineering record, not the shareable deliverable.** The canonical,
+> team-facing versions live in Google Docs, all linked from the **Master Index**:
+> https://docs.google.com/document/d/1E1gFzNvkswDZdYoC_MErBpN__x1SCEA01MehG_1UGk4/edit
+> (per-use-case User + Instructor guides, the Data Load & Required Previews doc, and the data-only
+> loader repo). Use the Google Docs to share; this `.md` is where the raw tested content came from.
+
 Working record of testing the **Genie Code** UI path end-to-end: starting from **only the
 synthetic data** (no metric views, no AI-function tables, no agents/dashboards/apps), can a
 workshop attendee build each asset with natural-language prompts?
