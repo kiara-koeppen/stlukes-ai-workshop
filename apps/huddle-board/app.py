@@ -30,11 +30,11 @@ from databricks.sdk.core import Config
 # ----------------------------------------------------------------------------
 # Configuration (catalog/schema hardcoded per workshop; warehouse via resource)
 # ----------------------------------------------------------------------------
-CATALOG = "kk_test"
+CATALOG = os.getenv("DATABRICKS_CATALOG", "kk_test")
 SCHEMA = "huddle"
 HUDDLE_DATE = "2026-09-15"  # the day's morning huddle
 # Warehouse id: prefer the app resource env var, fall back to the workshop id.
-WAREHOUSE_ID = os.getenv("DATABRICKS_WAREHOUSE_ID", "c68a614580fefe22")
+WAREHOUSE_ID = os.getenv("DATABRICKS_WAREHOUSE_ID")
 
 T_DEMO = f"{CATALOG}.{SCHEMA}.patient_demographics"
 T_AIEXT = f"{CATALOG}.{SCHEMA}.transcript_ai_extractions"

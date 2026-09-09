@@ -30,7 +30,7 @@ from databricks.sdk.core import Config
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-CATALOG = "kk_test"
+CATALOG = os.getenv("DATABRICKS_CATALOG", "kk_test")
 SCHEMA = "clinical"
 METRICS_VIEW = f"{CATALOG}.{SCHEMA}.ckd_metrics"
 REGISTRY = f"{CATALOG}.{SCHEMA}.ckd_patient_registry"

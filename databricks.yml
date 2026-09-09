@@ -1,0 +1,60 @@
+# St. Luke's AI Workshop -- Databricks Asset Bundle
+#
+# One-command bring-up of all four use cases (CKD, Medication Diversion, HTM,
+# AI Huddle) in a target workspace: data + metric views + AI functions +
+# dashboards + Genie spaces + apps.
+#
+# The only thing that changes between workspaces is the `catalog` variable and
+# the target's warehouse. Schema names (clinical, med_diversion, htm, huddle)
+# mirror the SLHS prod paths and are fixed.
+#
+# Targets:
+#   kk_test  (default) -- the facilitator build workspace; known-good values.
+#   workshop           -- the SLHS workshop workspace (adb-447340683886633).
+#                         catalog + warehouse_id are filled in from the
+#                         read-only prereq probe before first deploy.
+#
+# Deploy:  databricks bundle deploy -t workshop
+# Run:     databricks bundle run stlukes_setup -t workshop   # builds data->functions->genie
+#          databricks bundle run <app_key> -t workshop       # starts each app
+
+bundle:
+  name: stlukes-ai-workshop
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: >-
+      Target Unity Catalog. The four use-case schemas (clinical, med_diversion,
+      htm, huddle) are created under it by the setup job.
+    default: kk_test
+  warehouse_id:
+    description: >-
+      Serverless SQL warehouse ID used by the dashboards, the apps
+      (via the sql-warehouse app resource), and the setup job's SQL steps.
+    default: c68a614580fefe22 # kk_test Serverless Starter Warehouse
+
+targets:
+  kk_test:
+    default: true
+    mode: development
+    workspace:
+      profile: kk_test
+    variables:
+      catalog: kk_test
+      warehouse_id: c68a614580fefe22
+
+  workshop:
+    mode: development # art-of-the-possible workshop env; not a production deployment
+    workspace:
+      host: https://adb-447340683886633.13.azuredatabricks.net
+      profile: stlukes-workshop
+    variables:
+      # TODO(prereq-probe): confirm a catalog we can create schemas/volumes in
+      # (the facilitator workspace could not create `healthcare_ai` due to the
+      # metastore Default Storage requirement -- verify before relying on this).
+      catalog: healthcare_ai
+      # TODO(prereq-probe): set to a serverless SQL warehouse id in this workspace.
+      warehouse_id: PROBE_REQUIRED
