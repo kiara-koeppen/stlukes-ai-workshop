@@ -180,9 +180,17 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
 - **✅ Diversion AI function COMPLETE (attempt 2).** The lesson (G11): grounding in the real view + "do not
   invent" + naming the real id/name columns is what flips it from fabrication to correct.
 
-### Genie Agent — _pending_
-### AI/BI dashboard — _pending_
-### Databricks App — _pending (per CKD finding: scaffold only)_
+### Genie Agent — `01f1ac6ddfb815d48bae4fa7fd6df6b0` ("Medication Diversion Investigation")
+- **Prompt:** *"create a genie space for our diversion analysts to ask about suspicious medication activity
+  in plain english. use slhs_test1.med_diversion.medication_activity, the diversion_metrics view, and the
+  employee_risk_narratives table"*
+  → **Result: ✅** created the space over the 3 objects.
+- **Verified live (Conversation API):** *"which 5 employees have the most unwitnessed waste events?"* →
+  returned **Allison Hill, Angie Henderson, Noah Rhodes, Daniel Wagner** (the real planted diverters), with
+  correct SQL (`event_type='waste' AND witness_id IS NULL`). ✅ **Diversion Genie Agent COMPLETE.**
+
+### AI/BI dashboard — _in progress_
+### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 
