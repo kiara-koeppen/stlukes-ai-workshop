@@ -167,7 +167,18 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   For a HR/legal-sensitive use case, shipping hallucinated employees + invented evidence is dangerous.
   **The workshop MUST teach: pin the AI function to the real table/columns, and verify every AI output
   against the source data.** Do not trust Genie Code's "done" summary.
-- **Fix:** re-prompt explicitly grounding it in the real table + real employee_ids (attempt 2, below).
+- **Prompt (attempt 2 — the fix):** *"using our slhs_test1.med_diversion.diversion_metrics view, take the
+  top 10 employees by unwitnessed waste events - keep their real employee_id and employee_name from the
+  data, do not invent any. for each, use an ai function to write a 2-3 sentence risk narrative citing their
+  actual off-shift and unwitnessed-waste numbers. save it as a table in med_diversion"*
+  → **Result: ✅ correct.** Created `med_diversion.employee_risk_narratives` (10 rows: employee_id,
+  employee_name, unwitnessed_waste_events, off_shift_events, risk_narrative). Genie Code correctly read the
+  metric view (MEASURE/GROUP BY ALL) and used **real** employees.
+- **Verified (SQL):** top 4 are the **real planted diverters** — EMP-00001 Allison Hill, EMP-00003 Angie
+  Henderson, EMP-00002 Noah Rhodes, EMP-00004 Daniel Wagner — narratives cite their actual numbers; the
+  rest are real employees rated low-risk.
+- **✅ Diversion AI function COMPLETE (attempt 2).** The lesson (G11): grounding in the real view + "do not
+  invent" + naming the real id/name columns is what flips it from fabrication to correct.
 
 ### Genie Agent — _pending_
 ### AI/BI dashboard — _pending_
