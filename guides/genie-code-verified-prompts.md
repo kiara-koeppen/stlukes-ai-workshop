@@ -301,6 +301,13 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
   Reading the actual files keeps it honest — no fabrication. ✅ **Huddle AI function COMPLETE** (unstructured
   → structured path proven; persist with a one-line follow-up if a saved table is wanted).
 
-### Genie Agent — _in progress_
-### AI/BI dashboard — _pending_
+### Genie Agent — `01f1ac76e7bd1f249e8ed27613b69f7c` ("Care Team Daily Patient Huddle")
+- **Prompt:** *"create a genie space for our care teams to ask about the daily patient huddle in plain
+  english. use slhs_test1.huddle.patient_demographics, physician_inputs, the physician_inputs_metrics view,
+  and transcript_extractions"*
+  → **Result: ✅** (registered without an Accept gate this time — G13 is intermittent).
+- **Verified live (Conversation API):** *"how many patients were assigned to a team member who wasn't the
+  optimal one?"* → **20** (correct `MEASURE(non_optimal_assignment_count)`). ✅ **Huddle Genie Agent COMPLETE.**
+
+### AI/BI dashboard — _in progress_
 ### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
