@@ -20,7 +20,11 @@
 
 dbutils.widgets.text("catalog", "healthcare_ai", "Target catalog")
 dbutils.widgets.text("data_dir", "", "Path to synthetic-data/data (blank = auto-detect from repo)")
+# ATTENDEE (data-only) vs FACILITATOR (answer key): attendees build the metric views themselves with
+# Genie Code, so set this to "no" for the workshop data-only load. "yes" also builds the 4 metric views.
+dbutils.widgets.dropdown("load_metric_views", "yes", ["yes", "no"], "Also build metric views?")
 catalog = dbutils.widgets.get("catalog").strip()
+load_metric_views = dbutils.widgets.get("load_metric_views").strip().lower()
 
 import os
 data_dir = dbutils.widgets.get("data_dir").strip()
@@ -219,23 +223,27 @@ print("patients:", count(f"{catalog}.huddle.patient_demographics"),
 
 # COMMAND ----------
 
-repo_root_fs = data_dir.rsplit("/synthetic-data/data", 1)[0]
-mv_files = [
-    f"{repo_root_fs}/solutions/01-ckd/01_metric_view.sql",
-    f"{repo_root_fs}/solutions/02-diversion/01_metric_view.sql",
-    f"{repo_root_fs}/solutions/03-htm/01_metric_view.sql",
-    f"{repo_root_fs}/solutions/04-huddle/01_metric_view.sql",
-]
-for path in mv_files:
-    with open(path) as fh:
-        ddl = fh.read().replace("kk_test", catalog)
-    # Strip full-line "--" comments BEFORE splitting: the comment headers contain semicolons
-    # (e.g. "Catalog is kk_test here; swap to healthcare_ai"), which would otherwise break a
-    # naive split(";") and leave an unparseable fragment. Each file holds exactly one statement.
-    no_comments = "\n".join(l for l in ddl.splitlines() if not l.strip().startswith("--"))
-    for stmt in [s.strip() for s in no_comments.split(";") if s.strip()]:
-        spark.sql(stmt)
-    print("metric view applied from", path.split("/")[-2])
+if load_metric_views != "yes":
+    print("load_metric_views = 'no' -> skipping metric views (attendee data-only load; "
+          "attendees build the metric views live with Genie Code).")
+else:
+    repo_root_fs = data_dir.rsplit("/synthetic-data/data", 1)[0]
+    mv_files = [
+        f"{repo_root_fs}/solutions/01-ckd/01_metric_view.sql",
+        f"{repo_root_fs}/solutions/02-diversion/01_metric_view.sql",
+        f"{repo_root_fs}/solutions/03-htm/01_metric_view.sql",
+        f"{repo_root_fs}/solutions/04-huddle/01_metric_view.sql",
+    ]
+    for path in mv_files:
+        with open(path) as fh:
+            ddl = fh.read().replace("kk_test", catalog)
+        # Strip full-line "--" comments BEFORE splitting: the comment headers contain semicolons
+        # (e.g. "Catalog is kk_test here; swap to healthcare_ai"), which would otherwise break a
+        # naive split(";") and leave an unparseable fragment. Each file holds exactly one statement.
+        no_comments = "\n".join(l for l in ddl.splitlines() if not l.strip().startswith("--"))
+        for stmt in [s.strip() for s in no_comments.split(";") if s.strip()]:
+            spark.sql(stmt)
+        print("metric view applied from", path.split("/")[-2])
 
 # COMMAND ----------
 

@@ -46,6 +46,11 @@ variables:
       Serverless SQL warehouse ID used by the dashboards, the apps
       (via the sql-warehouse app resource), and the setup job's SQL steps.
     default: c68a614580fefe22 # kk_test Serverless Starter Warehouse
+  load_metric_views:
+    description: >-
+      "yes" also builds the 4 metric views (facilitator answer key). "no" loads data + volumes
+      only (the ATTENDEE data-only workshop load) -- attendees build the metric views with Genie Code.
+    default: "yes"
 
 targets:
   kk_test:
