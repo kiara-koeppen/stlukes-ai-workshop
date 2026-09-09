@@ -62,7 +62,17 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   `has_ckd = true` rather than the stricter "advanced-stage (3a+)". Both are valid; 518 matches the
   original CKD narrative. Instructor point: the exact count follows the definition the attendee phrases.
 
-### AI function (note extraction) — _in progress_
+### AI function (note extraction) — `slhs_test1.clinical.clinical_notes_ckd_extraction`
+- **Prompt 1:** *"i have clinical notes in slhs_test1.clinical.clinical_notes. use an ai function to read
+  each note and tell me whether it mentions chronic kidney disease and whether the patient is seeing
+  nephrology. save the results to a table i can query."*
+  → **Result: ✅** created `clinical_notes_ckd_extraction` — all **1,018** notes scored with `mentions_ckd`
+  and `seeing_nephrology` (used `ai_query` under the hood). No spec needed; the short prompt worked first try.
+- **Verified independently (SQL):** `mentions_ckd` = Yes 770 / No 245 / null 3. **Precision: of 770 notes
+  flagging CKD, 764 are for patients with `has_ckd=true` in the registry → 99.2%.**
+- **Payoff iterate (adding the undocumented-CKD flag):** _in progress_ — the clinical value is finding
+  patients whose notes say CKD but Epic doesn't have it documented.
+
 ### Genie Agent — _pending_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
