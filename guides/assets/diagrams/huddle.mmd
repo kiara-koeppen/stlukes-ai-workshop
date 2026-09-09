@@ -1,0 +1,16 @@
+flowchart TD
+  P["PROBLEM: care-team huddles lack a clear read on patient complexity and whether the right team member is assigned"]
+  D["Synthetic data (given): patient demographics + physician inputs + huddle transcripts (files)"]
+  P --> D
+  D --> MV["Metric View<br/>18 patients, avg complexity, 20 non-optimal team assignments"]
+  D --> AI["AI Function (ai_extract)<br/>pull barriers / social needs / follow-ups from transcript files"]
+  MV --> G["Genie Agent<br/>care team asks in plain English"]
+  AI --> G
+  MV --> DB["AI/BI Dashboard<br/>complexity and non-optimal assignments by provider"]
+  AI --> DB
+  G --> O["OUTCOME: right patient to the right team member, with social barriers surfaced"]
+  DB --> O
+  classDef prob fill:#ffd5d5,stroke:#c0392b,color:#000
+  classDef out fill:#d5f5e3,stroke:#1e8449,color:#000
+  class P prob
+  class O out

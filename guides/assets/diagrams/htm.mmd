@@ -1,0 +1,16 @@
+flowchart TD
+  P["PROBLEM: 8,000 medical devices aging out; no clear view of what to replace, when, and at what cost"]
+  D["Synthetic data (given): medical assets + work orders"]
+  P --> D
+  D --> MV["Metric View<br/>replacement planning: 1,388 assets support-ending 2026, $2.0B total cost"]
+  D --> AI["AI Function (ai_forecast)<br/>forecast corrective work orders per month (~465-493)"]
+  MV --> G["Genie Agent<br/>biomed team asks in plain English"]
+  AI --> G
+  MV --> DB["AI/BI Dashboard<br/>replacement cost by facility and manufacturer"]
+  AI --> DB
+  G --> O["OUTCOME: a data-driven capital replacement plan (what, when, cost)"]
+  DB --> O
+  classDef prob fill:#ffd5d5,stroke:#c0392b,color:#000
+  classDef out fill:#d5f5e3,stroke:#1e8449,color:#000
+  class P prob
+  class O out

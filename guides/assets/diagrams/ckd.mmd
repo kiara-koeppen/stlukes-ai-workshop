@@ -1,0 +1,16 @@
+flowchart TD
+  P["PROBLEM: CKD is often not documented in Epic, so care gaps and high-risk patients go unmanaged"]
+  D["Synthetic data (given): CKD patient registry + clinical notes"]
+  P --> D
+  D --> MV["Metric View<br/>quantify CKD: 1,524 with CKD, 518 care gaps, 230 high-risk"]
+  D --> AI["AI Function<br/>read notes to flag undocumented CKD (99.2% precision)"]
+  MV --> G["Genie Agent<br/>clinicians ask in plain English"]
+  AI --> G
+  MV --> DB["AI/BI Dashboard<br/>care-gap worklist by provider"]
+  AI --> DB
+  G --> O["OUTCOME: surface undocumented / under-managed CKD patients for outreach"]
+  DB --> O
+  classDef prob fill:#ffd5d5,stroke:#c0392b,color:#000
+  classDef out fill:#d5f5e3,stroke:#1e8449,color:#000
+  class P prob
+  class O out

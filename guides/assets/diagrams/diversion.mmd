@@ -1,0 +1,16 @@
+flowchart TD
+  P["PROBLEM: Drug diversion hides in normal medication activity (unwitnessed waste, off-shift use); hard to spot"]
+  D["Synthetic data (given): 45,000 medication activity events + employees + peer groups"]
+  P --> D
+  D --> MV["Metric View<br/>diversion signals by employee: unwitnessed waste, off-shift, controlled-substance"]
+  D --> AI["AI Function<br/>risk-summary narrative per flagged employee (grounded in real data)"]
+  MV --> G["Genie Agent<br/>investigators ask in plain English"]
+  AI --> G
+  MV --> DB["AI/BI Dashboard<br/>watchlist: top employees by unwitnessed waste"]
+  AI --> DB
+  G --> O["OUTCOME: surface the 4 highest-risk employees for review (not accusation, prioritization)"]
+  DB --> O
+  classDef prob fill:#ffd5d5,stroke:#c0392b,color:#000
+  classDef out fill:#d5f5e3,stroke:#1e8449,color:#000
+  class P prob
+  class O out
