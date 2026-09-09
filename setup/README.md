@@ -2,9 +2,15 @@
 
 `00_load_all_data.py` is a one-shot, parameterized loader. It creates the schemas, loads all four
 use cases' Delta tables from the CSVs committed in `synthetic-data/data/`, creates the volumes,
-uploads the unstructured files (CKD clinical notes, Huddle transcripts), and builds the four metric
-views. Schema/table/column names mirror the SLHS prod paths, so moving from workshop to prod is just
-the `catalog` widget.
+uploads the unstructured files (CKD clinical notes, Huddle transcripts, and the Diversion policy /
+HTM vendor-bulletin PDFs), and — depending on the `load_metric_views` toggle — optionally builds the
+four metric views. Schema/table/column names mirror the SLHS prod paths, so moving from workshop to
+prod is just the `catalog` widget.
+
+**Two modes (the `load_metric_views` widget):**
+- `yes` (default) = full facilitator/answer-key load, including the 4 metric views.
+- `no` = **attendee data-only load** (raw tables + volumes only). Use this for the workshop, where
+  attendees build the metric views (and everything downstream) live with Genie Code.
 
 ## Run it
 1. Add this repo to your Databricks workspace as a **Git folder** (Repos), so the CSVs come with it.
@@ -18,11 +24,13 @@ the `catalog` widget.
 | Schema | Tables | Volumes |
 |---|---|---|
 | `clinical` | ckd_patient_registry, clinical_notes | landing, clinical_notes_files |
-| `med_diversion` | medication_activity, employee_risk, peer_group | landing |
-| `htm` | medical_assets, work_orders | landing |
+| `med_diversion` | medication_activity, employee_risk, peer_group | landing, policy_docs (PDFs) |
+| `htm` | medical_assets, work_orders | landing, vendor_bulletins (PDFs) |
 | `huddle` | patient_demographics, transcript_extractions, physician_inputs | landing, transcripts |
 
-Plus metric views: `clinical.ckd_metrics`, `med_diversion.diversion_metrics`, `htm.htm_metrics`, `huddle.huddle_metrics`.
+Plus, **only when `load_metric_views=yes`**, the four metric views: `clinical.ckd_metrics`,
+`med_diversion.diversion_metrics`, `htm.htm_metrics`, `huddle.huddle_metrics`. (For the attendee
+data-only load, set `load_metric_views=no` and attendees build these with Genie Code.)
 
 ## Not loaded here (separate, downstream)
 The AI-function output tables, Genie Agents, AI/BI dashboards, and Apps are built by the scripts in
