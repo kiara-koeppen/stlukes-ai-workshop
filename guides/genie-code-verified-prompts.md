@@ -189,8 +189,26 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   returned **Allison Hill, Angie Henderson, Noah Rhodes, Daniel Wagner** (the real planted diverters), with
   correct SQL (`event_type='waste' AND witness_id IS NULL`). ✅ **Diversion Genie Agent COMPLETE.**
 
-### AI/BI dashboard — _in progress_
-### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
+### AI/BI dashboard — `01f1ac6e25fb1675926f2696701b2b56` ("Diversion Metrics Dashboard")
+- **Prompt:** *"build an ai/bi dashboard on the diversion_metrics view. tiles for total transactions, waste
+  events, and unwitnessed waste events; a bar chart of the top 10 employees by unwitnessed waste events;
+  and off-shift events by unit"* (then a follow-up to add the widgets — see gotcha below).
+- **Result: ✅** 5 widgets on the real `diversion_metrics` metric view (+ a top-10 employees dataset).
+- **Verified visually:** tiles **45K / 7.47K / 326** (total txns / waste / unwitnessed); top-10 chart shows
+  the **real diverters** (Allison Hill, Angie Henderson, Daniel Wagner, Noah Rhodes); off-shift by unit.
+  Screenshot: `guides/assets/diversion-dashboard-genie-code.png`. ✅ **Diversion dashboard COMPLETE.**
+- **Gotcha G12 (my mistake, worth teaching):** the dashboard is *created empty first*, then a second agent
+  builds the widgets. **Navigating to the dashboard while that's running interrupts it** (browser
+  beforeunload) → empty shell (0 widgets). Wait for the widget build to finish before opening it.
+
+### Databricks App — per the CKD finding (G8–G10), NOT re-run
+- The App finding is **use-case-independent** — it's about Genie Code's app-generation capability, not the
+  diversion data. Re-running the full scaffold→deploy→debug for each use case reproduces the same result
+  (deployable scaffold, not runnable without developer finishing). **Recommendation stands: ship the
+  Diversion app pre-built** (repo answer-key app `diversion-investigator` works). Fix recipe: see CKD.
+
+## ✅ 02 · Medication Diversion COMPLETE — metric view, AI function (after grounding fix), Genie Agent,
+dashboard all built via Genie Code + verified; app per the established finding.
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 
