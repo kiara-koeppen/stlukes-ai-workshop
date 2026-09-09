@@ -89,8 +89,19 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   **230**, generating `SELECT MEASURE(\`high_risk_patients\`) FROM …ckd_patient_registry_metrics`. Correct.
 - **✅ CKD Genie Agent COMPLETE** — created + live-verified from one natural prompt.
 
-### AI/BI dashboard — _next_ (note: Genie Code already made a starter dashboard on the wrong-turn prompt;
-will build/verify one properly on the UC metric view)
+### AI/BI dashboard — `01f1ac6418471f72859f9b559fac875f` ("CKD Patient Registry Dashboard")
+- **Prompt:** *"build an ai/bi dashboard on the ckd_patient_registry_metrics metric view. show total ckd
+  patients, care gap patients and high risk patients as big number tiles, plus care gap patients broken
+  down by ckd stage and by assigned provider"*
+  → **Result: ✅** 5 widgets. Genie Code used the **metric view as a native dataset** for tiles 1–4, and —
+  since provider isn't a metric-view dimension — **wrote a supplemental SQL query on the registry** for the
+  by-provider chart (nice automatic handling of the missing dimension).
+- **Verified visually (browser):** tiles render **1.52K / 518 / 230** (Total CKD / Care Gap / High Risk);
+  stage bar chart (3a ~204, 3b ~203); provider chart led by St. Luke's Meridian. Screenshot:
+  `guides/assets/ckd-dashboard-genie-code.png`.
+- **✅ CKD AI/BI dashboard COMPLETE.**
+
+### Databricks App — _in progress_ (testing whether Genie Code can build a Databricks App)
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 
