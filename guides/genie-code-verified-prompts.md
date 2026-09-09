@@ -213,5 +213,20 @@ dashboard all built via Genie Code + verified; app per the established finding.
 ### Databricks App — _pending_
 
 ## 02 · Medication Diversion — _pending_
-## 03 · HTM — _pending_
+## 03 · HTM (Equipment Planning)
+
+### Metric view — `slhs_test1.htm.medical_assets_metrics`
+- **Prompt (one shot):** *"build a reusable metric view in unity catalog on slhs_test1.htm.medical_assets
+  for capital equipment replacement planning. measures for asset count, total replacement cost, average
+  risk score, and assets whose support ends this year; dimensions for facility, manufacturer, device
+  status, and support-end year"*
+  → **Result: ✅ first try.** Genie Code **derived `support_end_year`** from `support_end_date` on its own.
+  Measures: asset_count, total_replacement_cost, avg_risk_score, assets_support_ending_this_year.
+- **Verified (SQL):** asset_count **8,000** · total replacement cost **$2.0B** · avg risk **65.6** ·
+  support ending this year (2026) **1,388** (matches answer key). ✅ **HTM metric view COMPLETE.**
+
+### AI function (ai_forecast) — _in progress_
+### Genie Agent — _pending_
+### AI/BI dashboard — _pending_
+### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
 ## 04 · Huddle — _pending_
