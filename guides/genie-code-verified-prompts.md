@@ -124,6 +124,18 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   together" segment — not a clean one-prompt build.
 - **Gotchas G8 (app.yaml valueFrom must name the resource), G9 (Genie Code doesn't bind warehouse/grant SP),
   G10 (generated dbsql.connect lacks auth).**
+- **Fix recipe (what to do during the workshop if using Genie Code's app):**
+  1. Edit `app.yaml`: `DATABRICKS_HTTP_PATH` → `valueFrom: sql-warehouse` (the resource name, not "resources").
+  2. Bind a warehouse to the app's `sql-warehouse` resource (UI: app → Edit → Resources → pick a warehouse;
+     or `databricks apps update <app> --json '{"resources":[{"name":"sql-warehouse","sql_warehouse":{"id":"<wh>","permission":"CAN_USE"}}]}'`).
+  3. Grant the app's service principal: `GRANT USE CATALOG/USE SCHEMA/SELECT` on the catalog+schema.
+  4. Edit `app.py` `dbsql.connect(...)` to add auth: `from databricks.sdk.core import Config`; `_cfg = Config()`;
+     `credentials_provider=lambda: _cfg.authenticate`; add `databricks-sdk` to `requirements.txt`.
+  5. Redeploy (`databricks apps deploy …`).
+- **Outcome after all 4 fixes:** app deployed clean (no config errors in logs) but **still hung on the query with
+  no error surfaced** in this workspace — an opaque connection hang. **RECOMMENDATION: for the workshop, ship the
+  app PRE-BUILT** (the repo's 4 answer-key Streamlit apps are known-good) rather than relying on Genie Code to
+  produce a working app. Genie Code's value for the App asset is *scaffolding the UI/logic*, not a runnable deploy.
 
 ## 02 · Medication Diversion — _next_
 ### AI/BI dashboard — _pending_
