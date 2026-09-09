@@ -101,7 +101,31 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   `guides/assets/ckd-dashboard-genie-code.png`.
 - **✅ CKD AI/BI dashboard COMPLETE.**
 
-### Databricks App — _in progress_ (testing whether Genie Code can build a Databricks App)
+### Databricks App — `ckd-undocumented-worklist` (deployed, but NOT working out of the box)
+- **Prompt:** *"build a databricks app for the nephrology team - a simple worklist showing the undocumented
+  ckd patients (their notes mention ckd but it's not documented in epic) so a coordinator can work through
+  them. use the ckd data in slhs_test1.clinical"*
+- **Result: ⚠️ PARTIAL — the key honest finding.** Genie Code **did** scaffold a Streamlit app (app.py +
+  app.yaml + requirements), create the app, and **deploy it successfully** (compute ACTIVE, deploy
+  SUCCEEDED, URL live). But the app **hangs on `load_worklist()` and never renders** — the generated
+  output is not data-connected. Fixing it required several manual steps, and one defect blocks it entirely:
+  1. **app.yaml bug:** `DATABRICKS_HTTP_PATH: valueFrom: resources` — there's no resource named "resources";
+     it must be the resource's name, `sql-warehouse`. Log: *"error resolving resource resources … not found."*
+  2. **No warehouse bound** to the app's `sql-warehouse` resource (had to `apps update` with the warehouse id).
+  3. **App service principal had no grants** (had to `GRANT USE CATALOG/SCHEMA + SELECT`).
+  4. **Even after 1–3, still hangs:** the generated `app.py` calls `dbsql.connect(server_hostname=…,
+     http_path=…)` with **no authentication** (no `access_token` / `credentials_provider`), so the SQL
+     connection never completes. This needs a real code edit to wire SP OAuth.
+- **Workshop implication (important):** For metric view / AI function / Genie Agent / dashboard, Genie Code
+  goes **data → working asset** from natural prompts. **The Databricks App is the exception** — Genie Code
+  produces a *deployable scaffold* but finishing it (resource wiring + grants + connector auth) is a
+  developer task. Recommend: for the workshop, **provide the app pre-built** (the repo's 4 answer-key
+  Streamlit apps already work), or frame the app as a guided "Genie Code scaffolds it, we finish the wiring
+  together" segment — not a clean one-prompt build.
+- **Gotchas G8 (app.yaml valueFrom must name the resource), G9 (Genie Code doesn't bind warehouse/grant SP),
+  G10 (generated dbsql.connect lacks auth).**
+
+## 02 · Medication Diversion — _next_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 
