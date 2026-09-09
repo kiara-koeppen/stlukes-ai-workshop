@@ -288,7 +288,19 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
   original answer key**, which had a known bug counting the 34 input rows), non_optimal_assignment_count
   **20** (matches raw), avg complexity 0.8 / avg relationship 2.6. ✅ **Huddle metric view COMPLETE.**
 
-### AI function (transcript extraction) — _in progress_
-### Genie Agent — _pending_
+### AI function (transcript extraction from the Volume) — ✅ (grounded; inline per G7)
+- **Prompt:** *"we have care-team huddle meeting transcripts as text files in the volume
+  slhs_test1.huddle.transcripts. use an ai function to read each transcript file and pull out the key
+  factors discussed for each patient - barriers to care, social needs, and recommended follow-up actions.
+  save it as a table i can review. use the real transcript contents, do not make anything up"*
+  → **Result: ✅ grounded.** Genie Code read the transcript **files in the Volume** and extracted structured
+  factors (barriers / social needs / follow-ups). Returned **inline** (G7 — not auto-saved despite "save as
+  a table"; a follow-up persists it).
+- **Verified (SQL) — the G11 guard:** the 4 flagged patients (Jesse Flowers, Jennifer Rocha, Devin
+  Schaefer, John Ryan) are **all real** in `patient_demographics`; 14 others correctly noted routine.
+  Reading the actual files keeps it honest — no fabrication. ✅ **Huddle AI function COMPLETE** (unstructured
+  → structured path proven; persist with a one-line follow-up if a saved table is wanted).
+
+### Genie Agent — _in progress_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
