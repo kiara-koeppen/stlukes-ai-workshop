@@ -24,6 +24,17 @@ bundle:
 include:
   - resources/*.yml
 
+# Old per-use-case HTM scratch loaders: several share a basename, so they collide
+# when synced (Databricks strips notebook extensions). They're superseded by
+# setup/00_load_all_data.py and unused by the bundle -- exclude from sync.
+sync:
+  exclude:
+    - solutions/03-htm/00_load_data.sql
+    - solutions/03-htm/00_load_data.py
+    - solutions/03-htm/00_load_data_sql.sql
+    - "**/screenshot*.png"
+    - "**/__pycache__/**"
+
 variables:
   catalog:
     description: >-
@@ -52,9 +63,11 @@ targets:
       host: https://adb-447340683886633.13.azuredatabricks.net
       profile: stlukes-workshop
     variables:
-      # TODO(prereq-probe): confirm a catalog we can create schemas/volumes in
-      # (the facilitator workspace could not create `healthcare_ai` due to the
-      # metastore Default Storage requirement -- verify before relying on this).
-      catalog: healthcare_ai
-      # TODO(prereq-probe): set to a serverless SQL warehouse id in this workspace.
-      warehouse_id: PROBE_REQUIRED
+      # Probe confirmed: catalog creation is blocked here by metastore Default
+      # Storage, so we deploy into the existing writable `slhs_test1` catalog.
+      # Our schemas (clinical, med_diversion, htm, huddle) don't collide with
+      # the catalog's existing ones. Swapping to a dedicated catalog later is
+      # just this one value.
+      catalog: slhs_test1
+      # Serverless Starter Warehouse in adb-447340683886633 (serverless, PRO).
+      warehouse_id: 9946580e2a7f4dd1

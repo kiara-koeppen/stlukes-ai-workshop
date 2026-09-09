@@ -1,0 +1,26 @@
+# Setup job: stands up the data layer for all four use cases.
+#
+# Runs the one-shot loader notebook, which creates the schemas, loads every
+# base Delta table from the committed CSVs, creates the volumes + unstructured
+# files, and builds the four metric views -- all under ${var.catalog}.
+#
+# This is the answer-key/proving path (data + metric views). The attendee-facing
+# SLHS repo uses a data-only variant (no metric views -- attendees build those
+# with Genie Code).
+#
+# Serverless: no compute block is specified, so the notebook task runs on
+# serverless job compute.
+
+resources:
+  jobs:
+    stlukes_load_data:
+      name: "[${bundle.target}] St Lukes -- load synthetic data + metric views"
+      tasks:
+        - task_key: load_all_data
+          notebook_task:
+            notebook_path: ../setup/00_load_all_data.py
+            base_parameters:
+              catalog: ${var.catalog}
+              data_dir: "" # blank = auto-detect from the deployed bundle layout
+      queue:
+        enabled: true
