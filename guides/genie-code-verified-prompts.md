@@ -137,7 +137,25 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   app PRE-BUILT** (the repo's 4 answer-key Streamlit apps are known-good) rather than relying on Genie Code to
   produce a working app. Genie Code's value for the App asset is *scaffolding the UI/logic*, not a runnable deploy.
 
-## 02 · Medication Diversion — _next_
+## 02 · Medication Diversion
+
+### Metric view — `slhs_test1.med_diversion.diversion_metrics`
+- **Prompt (one shot):** *"build a reusable metric view in unity catalog on
+  slhs_test1.med_diversion.medication_activity to help spot possible drug diversion. measures for total
+  transactions, off-shift activity, and waste events; dimensions for employee, unit and shift"*
+  → **Result: ✅ first try** (the G3 lesson applied — "reusable metric view in unity catalog" + "measures/
+  dimensions" language got a metric view directly, no dashboard detour, and **friendly names** this time,
+  e.g. "Total Transactions"). Genie Code went beyond the ask, adding strong signals: Unwitnessed Waste
+  Events, Controlled Substance Txns, Out-of-Dept Events, No-Pain-Improvement Admins, Off-Shift %.
+- **Verified (SQL):** Total Transactions 45,000 · Off-Shift 27,045 · Waste 7,472 · Unwitnessed Waste 326.
+- **Signal check:** grouped by employee, ordered by Unwitnessed Waste → **the 4 planted diverters top the
+  list** (EMP-00001/00003/00002/00004 = 88/87/83/68; next is 0). ✅
+- **✅ Diversion metric view COMPLETE.**
+
+### AI function — _in progress_
+### Genie Agent — _pending_
+### AI/BI dashboard — _pending_
+### Databricks App — _pending (per CKD finding: scaffold only)_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 
