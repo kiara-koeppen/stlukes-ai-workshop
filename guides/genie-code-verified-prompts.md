@@ -60,6 +60,7 @@ Attach via the Genie space → **Configure → Sources → Add → (Volume/Files
 | G14 | **`ai_forecast()` is a PREVIEW (Predictive AI Functions) and was DISABLED here.** Genie Code fell back to Python statsmodels. | Enable **Settings > Previews > Predictive AI Functions** for the native `ai_forecast` path. Belongs in the required-previews doc. |
 | G15 | Genie Code may **save to an existing table name and overwrite it** (Huddle extraction wrote to `transcript_extractions`), or save to the `default` schema (G11). | Tell it the exact target table/schema; check whether the name already exists before running.
 | G16 | **Genie-on-Volumes not available** — the Genie space Configure→Sources→Add menu offered only Table/Metric View/SQL function (no Volume/Files). | It's a Beta needing enablement; can't attach the PDF volumes for doc Q&A until then. Verify enablement before the onsite. |
+| G17 | **The AI/BI Dashboard's built-in Ask Genie auto-generates its OWN Genie space** from the dashboard datasets, and that one is NOT curated (no instructions, sample questions, or metric-view grounding). | Point users to the **curated Genie Agent you built** for the use case instead (connect the dashboard's Ask-Genie to it), so they get the governed, curated natural-language experience rather than the uncurated auto-generated space. |
 
 ---
 
