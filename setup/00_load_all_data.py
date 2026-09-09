@@ -135,6 +135,9 @@ CREATE OR REPLACE TABLE `{catalog}`.med_diversion.peer_group AS
 SELECT CAST(peer_group_id AS STRING) peer_group_id, CAST(role AS STRING) role, CAST(unit AS STRING) unit, CAST(description AS STRING) description
 FROM read_files('/Volumes/{catalog}/med_diversion/landing/peer_group.csv', format=>'csv', header=>true, mode=>'PERMISSIVE')
 """)
+# Unstructured policy / SOP PDFs for Genie-on-Volumes / ai_parse_document
+ensure_volume("med_diversion", "policy_docs")
+stage_dir("med_diversion", "diversion/docs", "policy_docs")
 print("med activity:", count(f"{catalog}.med_diversion.medication_activity"),
       "| employees:", count(f"{catalog}.med_diversion.employee_risk"))
 
@@ -166,6 +169,9 @@ SELECT CAST(work_order_id AS STRING) work_order_id, CAST(asset_number AS STRING)
  CAST(labor_hours AS DECIMAL(5,2)) labor_hours, CAST(status AS STRING) status
 FROM read_files('/Volumes/{catalog}/htm/landing/work_orders.csv', format=>'csv', header=>true, mode=>'PERMISSIVE')
 """)
+# Unstructured vendor EOL bulletin PDFs for Genie-on-Volumes / ai_parse_document
+ensure_volume("htm", "vendor_bulletins")
+stage_dir("htm", "htm/docs", "vendor_bulletins")
 print("assets:", count(f"{catalog}.htm.medical_assets"), "| work_orders:", count(f"{catalog}.htm.work_orders"))
 
 # COMMAND ----------
