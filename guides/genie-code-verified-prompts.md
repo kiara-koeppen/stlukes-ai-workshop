@@ -276,4 +276,19 @@ dashboard all built via Genie Code + verified; app per the established finding.
 
 ## ✅ 03 · HTM COMPLETE — metric view, AI function (statsmodels fallback; ai_forecast needs the preview),
 Genie Agent, dashboard all built via Genie Code + verified; app per the established finding.
-## 04 · Huddle — _pending_
+## 04 · AI Huddle Management
+
+### Metric view — `slhs_test1.huddle.physician_inputs_metrics`
+- **Prompt (one shot):** *"build a reusable metric view in unity catalog on slhs_test1.huddle.physician_inputs
+  for our care-team huddle. measures for patient count, average patient complexity score, average provider
+  relationship score, and count of non-optimal assignments (where assigned_team_member is not the
+  optimal_team_member); dimensions for provider name, huddle date, and assigned team member"*
+  → **Result: ✅ first try.**
+- **Verified (SQL):** patient_count **18** (Genie Code used `count(distinct pat_id)` — **better than the
+  original answer key**, which had a known bug counting the 34 input rows), non_optimal_assignment_count
+  **20** (matches raw), avg complexity 0.8 / avg relationship 2.6. ✅ **Huddle metric view COMPLETE.**
+
+### AI function (transcript extraction) — _in progress_
+### Genie Agent — _pending_
+### AI/BI dashboard — _pending_
+### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
