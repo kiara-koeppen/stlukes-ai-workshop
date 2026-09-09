@@ -225,8 +225,17 @@ dashboard all built via Genie Code + verified; app per the established finding.
 - **Verified (SQL):** asset_count **8,000** · total replacement cost **$2.0B** · avg risk **65.6** ·
   support ending this year (2026) **1,388** (matches answer key). ✅ **HTM metric view COMPLETE.**
 
-### AI function (ai_forecast) — _in progress_
-### Genie Agent — _pending_
+### AI function (ai_forecast) — `slhs_test1.htm.corrective_wo_forecast`
+- **Prompt (one shot):** *"using slhs_test1.htm.work_orders, forecast how many corrective maintenance work
+  orders we'll get each month for the next 6 months. use an ai forecasting function and save the forecast
+  as a table i can query"*
+  → **Result: ✅** created `corrective_wo_forecast` (6 rows: forecast_month, predicted_wo_count,
+  lower_bound_95, upper_bound_95, model, generated_on).
+- **Verified (SQL):** predictions **~465–493/month** (bounds ~436–522), HoltWinters model; matches the
+  actual history (447–502/month) → **grounded in real data, no fabrication.** (`ai_forecast` is mechanical,
+  so unlike the Diversion narratives it didn't invent.) ✅ **HTM AI function COMPLETE.**
+
+### Genie Agent — _in progress_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
 ## 04 · Huddle — _pending_
