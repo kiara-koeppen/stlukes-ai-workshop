@@ -39,6 +39,7 @@ Confirmed in this workspace while testing:
 | G6 | **The exact numbers follow how you phrase the definition.** "Patients who *have* CKD" → `has_ckd=true` (518 care gap); "advanced-stage CKD" → stage 3a+ (500). Genie Code faithfully builds what you say. | Not a bug — a teaching point. If a specific clinical definition matters, phrase it; otherwise expect a defensible interpretation. Facilitators should know why a count differs from the slide. |
 | G13 | Some Genie-space builds end on an **"Accept all" gate** — the space doesn't register until clicked. | Watch for the approval gate after a space build; click Accept all. |
 | G14 | **`ai_forecast()` is a PREVIEW (Predictive AI Functions) and was DISABLED here.** Genie Code fell back to Python statsmodels. | Enable **Settings > Previews > Predictive AI Functions** for the native `ai_forecast` path. Belongs in the required-previews doc. |
+| G15 | Genie Code may **save to an existing table name and overwrite it** (Huddle extraction wrote to `transcript_extractions`), or save to the `default` schema (G11). | Tell it the exact target table/schema; check whether the name already exists before running.
 
 ---
 
@@ -293,13 +294,17 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
   slhs_test1.huddle.transcripts. use an ai function to read each transcript file and pull out the key
   factors discussed for each patient - barriers to care, social needs, and recommended follow-up actions.
   save it as a table i can review. use the real transcript contents, do not make anything up"*
-  → **Result: ✅ grounded.** Genie Code read the transcript **files in the Volume** and extracted structured
-  factors (barriers / social needs / follow-ups). Returned **inline** (G7 — not auto-saved despite "save as
-  a table"; a follow-up persists it).
+  → **Result: ✅ grounded + persisted.** Genie Code peeked at one file, then used **`ai_extract`** on all
+  **18 transcript files in the Volume** (100% success) and **saved to `slhs_test1.huddle.transcript_extractions`**
+  (columns: patient_id, huddle_date, patient_name, provider_name, barriers_to_care[], social_needs[],
+  recommended_followup_actions[], extraction_successful).
 - **Verified (SQL) — the G11 guard:** the 4 flagged patients (Jesse Flowers, Jennifer Rocha, Devin
   Schaefer, John Ryan) are **all real** in `patient_demographics`; 14 others correctly noted routine.
-  Reading the actual files keeps it honest — no fabrication. ✅ **Huddle AI function COMPLETE** (unstructured
-  → structured path proven; persist with a one-line follow-up if a saved table is wanted).
+  Reading the actual files keeps it honest — **no fabrication** (contrast with the Diversion narrative attempt-1).
+- **Gotcha G15:** it wrote to the **existing** table name `transcript_extractions`, **overwriting** the
+  pre-loaded answer-key table. (For a data-only attendee this is a create; for the answer-key workspace it
+  overwrote — name collisions can silently replace a table.) ✅ **Huddle AI function COMPLETE** (native
+  `ai_extract`, unstructured→structured, grounded).
 
 ### Genie Agent — `01f1ac76e7bd1f249e8ed27613b69f7c` ("Care Team Daily Patient Huddle")
 - **Prompt:** *"create a genie space for our care teams to ask about the daily patient huddle in plain
@@ -309,5 +314,24 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
 - **Verified live (Conversation API):** *"how many patients were assigned to a team member who wasn't the
   optimal one?"* → **20** (correct `MEASURE(non_optimal_assignment_count)`). ✅ **Huddle Genie Agent COMPLETE.**
 
-### AI/BI dashboard — _in progress_
-### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
+### AI/BI dashboard — `01f1ac773dd21f4783074ddab6746e3a` ("Care Team Huddle - Provider & Assignment Analytics")
+- **Prompt:** *"build an ai/bi dashboard on the physician_inputs_metrics view. tiles for patient count,
+  average patient complexity score, and non-optimal assignment count; a bar chart of patient count by
+  provider name; and non-optimal assignments by assigned team member"*
+  → **Result: ✅** 5 widgets on the metric view (waited via API — no G12 interruption).
+- **Verified visually:** tiles **18 / 0.76 / 20**; provider chart (Hill & Doyle 12, Fowler 10); non-optimal
+  by team member (Hill 10, Fowler 7, Doyle 3). Screenshot: `guides/assets/huddle-dashboard-genie-code.png`.
+  ✅ **Huddle dashboard COMPLETE.**
+
+### Databricks App — per CKD finding (G8–G10), NOT re-run; ship pre-built (`huddle-board` works).
+
+## ✅ 04 · AI Huddle Management COMPLETE — metric view, AI function (ai_extract, grounded), Genie Agent,
+dashboard all built via Genie Code + verified; app per the established finding.
+
+---
+
+# ✅ ALL FOUR USE CASES COMPLETE
+Every use case: metric view + AI function + Genie Agent + AI/BI dashboard **built via Genie Code from
+data-only state and independently verified**. Apps: Genie Code scaffolds+deploys but the output isn't
+runnable without developer finishing (G8–G10) → ship the repo's 4 pre-built answer-key apps.
+**Headline guardrail: G11 — Genie Code can fabricate; always verify AI output against source rows.**
