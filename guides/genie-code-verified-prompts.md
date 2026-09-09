@@ -235,7 +235,17 @@ dashboard all built via Genie Code + verified; app per the established finding.
   actual history (447–502/month) → **grounded in real data, no fabrication.** (`ai_forecast` is mechanical,
   so unlike the Diversion narratives it didn't invent.) ✅ **HTM AI function COMPLETE.**
 
-### Genie Agent — _in progress_
-### AI/BI dashboard — _pending_
+### Genie Agent — `01f1ac71937418af98ba72f0f4976b5d` ("HTM Medical Equipment & Replacement Planning")
+- **Prompt:** *"create a genie space for our biomed / HTM team to ask about medical equipment and
+  replacement planning in plain english. use slhs_test1.htm.medical_assets, the medical_assets_metrics
+  view, and the corrective_wo_forecast table"*
+  → **Result: ✅** rich space (5 SQL examples, 10 knowledge snippets, filters/measures, 5 starter questions).
+- **Gotcha G13:** this space build ended on a **"Accept all" approval gate** (2 assets) — until clicked, the
+  space doesn't register in the data-rooms API. CKD/Diversion auto-created; HTM required the click. Watch
+  for the Accept gate.
+- **Verified live (Conversation API):** *"how many assets have support ending in 2026?"* → **1,388** (correct
+  SQL `MEASURE(asset_count) WHERE support_end_year=2026`). ✅ **HTM Genie Agent COMPLETE.**
+
+### AI/BI dashboard — _in progress_
 ### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
 ## 04 · Huddle — _pending_
