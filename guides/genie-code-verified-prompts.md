@@ -70,10 +70,27 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   and `seeing_nephrology` (used `ai_query` under the hood). No spec needed; the short prompt worked first try.
 - **Verified independently (SQL):** `mentions_ckd` = Yes 770 / No 245 / null 3. **Precision: of 770 notes
   flagging CKD, 764 are for patients with `has_ckd=true` in the registry → 99.2%.**
-- **Payoff iterate (adding the undocumented-CKD flag):** _in progress_ — the clinical value is finding
-  patients whose notes say CKD but Epic doesn't have it documented.
+- **Payoff iterate:** *"now give me a table of the patients whose notes mention ckd but who aren't
+  documented as ckd in the registry - documented_ckd is No or None. this is our undocumented ckd worklist"*
+  → **Result: ✅ (as analysis).** Genie Code joined the extraction to the registry and returned the
+  worklist **inline**: ~500 undocumented CKD patients (CKD 3a 204, 3b 203, CKD 4 93), and flagged the
+  most urgent — **93 stage-4 undocumented, 28 not seeing nephrology.** This is the CKD use-case payoff.
+- **Note (G7):** "give me a table of…" returns **inline query results, not a saved table.** Genie Code
+  offered a "Save this worklist as a table" follow-up. To persist an artifact, say so explicitly.
+- **✅ CKD AI function COMPLETE** — extraction table verified (99.2% precision) + undocumented-worklist
+  analysis demonstrated. Persisting the worklist is a one-prompt follow-up if a saved table is wanted.
 
-### Genie Agent — _pending_
+### Genie Agent — `01f1ac630be811fab2a17b766a235f5d` ("CKD Patient Registry")
+- **Prompt:** *"create a genie space on the ckd data so clinicians can ask questions about kidney patients
+  in plain english. use the ckd patient registry and the ckd_patient_registry_metrics metric view we built"*
+  → **Result: ✅ Genie Code created a working Genie space** over the registry + metric view, and even
+  proposed sample questions. **Big finding: Genie Code can build the Genie Agent itself**, not just SQL.
+- **Verified live (Conversation API):** asked *"how many high risk patients are there?"* → answered
+  **230**, generating `SELECT MEASURE(\`high_risk_patients\`) FROM …ckd_patient_registry_metrics`. Correct.
+- **✅ CKD Genie Agent COMPLETE** — created + live-verified from one natural prompt.
+
+### AI/BI dashboard — _next_ (note: Genie Code already made a starter dashboard on the wrong-turn prompt;
+will build/verify one properly on the UC metric view)
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending_
 

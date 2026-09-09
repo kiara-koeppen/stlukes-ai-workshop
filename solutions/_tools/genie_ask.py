@@ -8,10 +8,11 @@ Usage:
 
 Auth: pulls host + bearer token from the Databricks CLI (profile kk_test).
 """
-import json, subprocess, sys, time
+import json, os, subprocess, sys, time
 import requests
 
-PROFILE = "kk_test"
+# Override with GENIE_PROFILE for other workspaces (e.g. the SLHS workshop workspace).
+PROFILE = os.environ.get("GENIE_PROFILE", "kk_test")
 
 
 def cli(*args):
