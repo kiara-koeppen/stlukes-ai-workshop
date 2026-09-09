@@ -26,6 +26,7 @@ and self-corrects. `@` references objects, `/` runs commands, model selector def
 | G3 | **A metric-view ask phrased as "so I can *see* X *broken down by* Y" makes Genie Code build a DASHBOARD** (with an inline/local metric view), not a governed Unity Catalog metric view object. | Say **"reusable metric view in Unity Catalog"** and describe **measures** and **dimensions**. Avoid viz words ("see", "broken down by", "chart"). A one-line course-correction ("not a dashboard — I want a reusable metric view in Unity Catalog") fixes it in the same chat. |
 | G4 | Genie Code **names measures/dimensions by raw column** (`patient_count`, `actual_ckd_stage`) even when it shows friendly labels ("Total Patients", "CKD Stage") in chat. | If you want friendly, governed names, ask explicitly ("name the measures Patient Count, Patients With CKD…"). Otherwise query with the raw names. |
 | G5 | Metric views do **not** appear in `information_schema.views`. | They show in `information_schema.tables` with `table_type = 'METRIC_VIEW'`. (Verification note.) |
+| G11 | **Genie Code can FABRICATE data.** Asked for a diversion AI function, it invented employees + evidence instead of using the real table, and saved to the `default` schema. | Ground the prompt in the exact table + columns; **verify every AI output against source rows**; never trust the "done" summary. The single most important workshop guardrail. |
 | G6 | **The exact numbers follow how you phrase the definition.** "Patients who *have* CKD" → `has_ckd=true` (518 care gap); "advanced-stage CKD" → stage 3a+ (500). Genie Code faithfully builds what you say. | Not a bug — a teaching point. If a specific clinical definition matters, phrase it; otherwise expect a defensible interpretation. Facilitators should know why a count differs from the slide. |
 
 ---
@@ -152,7 +153,22 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   list** (EMP-00001/00003/00002/00004 = 88/87/83/68; next is 0). ✅
 - **✅ Diversion metric view COMPLETE.**
 
-### AI function — _in progress_
+### AI function — ⚠️ CRITICAL GOTCHA (G11): Genie Code FABRICATED the data on the first attempt
+- **Prompt (attempt 1):** *"for the top 10 employees who look suspicious for drug diversion (high unwitnessed
+  waste and off-shift controlled-substance activity), use an ai function to write a short risk-summary
+  narrative explaining why each one is a concern. save it as a table i can review"*
+  → **Result: ⚠️ HALLUCINATED.** Genie Code built an elaborate pipeline (`gold_diversion_flags`, composite
+  risk scores, rule codes like `R10_AFTER_DISCHARGE`) and wrote AI narratives — but about **fabricated
+  employees** ("James Carter / E5001", "Sarah Mitchell", "Emily Rodriguez") that **do not exist in the
+  data**. The real planted diverters are EMP-00001 Allison Hill, EMP-00002 Noah Rhodes, EMP-00003 Angie
+  Henderson, EMP-00004 Daniel Wagner. `SELECT count(*) … WHERE employee_name='James Carter'` = **0**.
+  It also silently saved the table to the **`default`** schema, not `med_diversion` (secondary gotcha).
+- **Why it matters (headline finding):** the output looked professional and would have passed a glance.
+  For a HR/legal-sensitive use case, shipping hallucinated employees + invented evidence is dangerous.
+  **The workshop MUST teach: pin the AI function to the real table/columns, and verify every AI output
+  against the source data.** Do not trust Genie Code's "done" summary.
+- **Fix:** re-prompt explicitly grounding it in the real table + real employee_ids (attempt 2, below).
+
 ### Genie Agent — _pending_
 ### AI/BI dashboard — _pending_
 ### Databricks App — _pending (per CKD finding: scaffold only)_
