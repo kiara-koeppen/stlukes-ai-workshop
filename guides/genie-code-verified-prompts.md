@@ -17,6 +17,15 @@ and self-corrects. `@` references objects, `/` runs commands, model selector def
 
 ---
 
+## Required previews / enablement (for the load-instructions doc)
+Confirmed in this workspace while testing:
+- **Genie Code** must be available (it's the whole workshop engine) — confirm it's enabled in the target workspace.
+- **Predictive AI Functions (`ai_forecast`)** was **disabled** — enable under **Settings > Previews** if the HTM `ai_forecast` path is wanted (Genie Code otherwise falls back to statsmodels).
+- **Genie-on-Volumes (Beta)** for the Diversion policy PDFs / HTM vendor bulletins (attach volumes in the Genie UI).
+- Metric views require **DBR 17.2+**; AI Functions (`ai_query`) + Genie Agents + AI/BI dashboards + Apps were all available here.
+
+---
+
 ## Global gotchas (apply to all use cases)
 
 | # | Gotcha | Workaround |
@@ -28,6 +37,8 @@ and self-corrects. `@` references objects, `/` runs commands, model selector def
 | G5 | Metric views do **not** appear in `information_schema.views`. | They show in `information_schema.tables` with `table_type = 'METRIC_VIEW'`. (Verification note.) |
 | G11 | **Genie Code can FABRICATE data.** Asked for a diversion AI function, it invented employees + evidence instead of using the real table, and saved to the `default` schema. | Ground the prompt in the exact table + columns; **verify every AI output against source rows**; never trust the "done" summary. The single most important workshop guardrail. |
 | G6 | **The exact numbers follow how you phrase the definition.** "Patients who *have* CKD" → `has_ckd=true` (518 care gap); "advanced-stage CKD" → stage 3a+ (500). Genie Code faithfully builds what you say. | Not a bug — a teaching point. If a specific clinical definition matters, phrase it; otherwise expect a defensible interpretation. Facilitators should know why a count differs from the slide. |
+| G13 | Some Genie-space builds end on an **"Accept all" gate** — the space doesn't register until clicked. | Watch for the approval gate after a space build; click Accept all. |
+| G14 | **`ai_forecast()` is a PREVIEW (Predictive AI Functions) and was DISABLED here.** Genie Code fell back to Python statsmodels. | Enable **Settings > Previews > Predictive AI Functions** for the native `ai_forecast` path. Belongs in the required-previews doc. |
 
 ---
 
@@ -231,9 +242,14 @@ dashboard all built via Genie Code + verified; app per the established finding.
   as a table i can query"*
   → **Result: ✅** created `corrective_wo_forecast` (6 rows: forecast_month, predicted_wo_count,
   lower_bound_95, upper_bound_95, model, generated_on).
-- **Verified (SQL):** predictions **~465–493/month** (bounds ~436–522), HoltWinters model; matches the
-  actual history (447–502/month) → **grounded in real data, no fabrication.** (`ai_forecast` is mechanical,
-  so unlike the Diversion narratives it didn't invent.) ✅ **HTM AI function COMPLETE.**
+- **Verified (SQL):** predictions **~465–493/month** (bounds ~436–522); matches the actual history
+  (447–502/month) → **grounded in real data, no fabrication.**
+- **⚠️ REQUIRED-PREVIEW FINDING (G14):** `ai_forecast()` is **DISABLED in this workspace** (both V1 and V2).
+  Genie Code reported *"an admin must enable **Predictive AI Functions** under Settings > Previews"* and
+  **fell back to Python `statsmodels` Holt-Winters** to produce the forecast. So the table is a valid
+  forecast, but it did **not** use `ai_forecast`. **For the workshop, enable the Predictive AI Functions
+  preview** if you want the native `ai_forecast` path (goes in the required-previews doc). ✅ **HTM AI
+  function COMPLETE (via fallback; ai_forecast pending preview enablement).**
 
 ### Genie Agent — `01f1ac71937418af98ba72f0f4976b5d` ("HTM Medical Equipment & Replacement Planning")
 - **Prompt:** *"create a genie space for our biomed / HTM team to ask about medical equipment and
@@ -246,6 +262,18 @@ dashboard all built via Genie Code + verified; app per the established finding.
 - **Verified live (Conversation API):** *"how many assets have support ending in 2026?"* → **1,388** (correct
   SQL `MEASURE(asset_count) WHERE support_end_year=2026`). ✅ **HTM Genie Agent COMPLETE.**
 
-### AI/BI dashboard — _in progress_
-### Databricks App — _pending (per CKD finding: scaffold only; ship pre-built)_
+### AI/BI dashboard — `01f1ac7373d7193bb7283d462b86b943` ("HTM Capital Equipment Replacement Planning")
+- **Prompt:** *"build an ai/bi dashboard on the medical_assets_metrics view. tiles for total assets, total
+  replacement cost, and assets with support ending this year; a bar chart of assets ending support this
+  year by facility; and total replacement cost by manufacturer"*
+  → **Result: ✅** 5 widgets on the metric view (I waited via API this time — no G12 interruption).
+- **Verified visually:** tiles **8K / ~$2.0B / 1.39K (1,388)**; facility chart (Nampa 139) + manufacturer
+  chart (Philips ~$206M, GE ~$171M). Screenshot: `guides/assets/htm-dashboard-genie-code.png`.
+  (Minor cosmetic: the cost tile showed a raw `$2.01728…B` — Genie Code didn't apply compact formatting;
+  trivial to fix with a follow-up.) ✅ **HTM dashboard COMPLETE.**
+
+### Databricks App — per CKD finding (G8–G10), NOT re-run; ship pre-built (`htm-equipment-planner` works).
+
+## ✅ 03 · HTM COMPLETE — metric view, AI function (statsmodels fallback; ai_forecast needs the preview),
+Genie Agent, dashboard all built via Genie Code + verified; app per the established finding.
 ## 04 · Huddle — _pending_
