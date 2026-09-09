@@ -21,8 +21,21 @@ and self-corrects. `@` references objects, `/` runs commands, model selector def
 Confirmed in this workspace while testing:
 - **Genie Code** must be available (it's the whole workshop engine) — confirm it's enabled in the target workspace.
 - **Predictive AI Functions (`ai_forecast`)** was **disabled** — enable under **Settings > Previews** if the HTM `ai_forecast` path is wanted (Genie Code otherwise falls back to statsmodels).
-- **Genie-on-Volumes (Beta)** for the Diversion policy PDFs / HTM vendor bulletins (attach volumes in the Genie UI).
+- **Genie-on-Volumes ("analyze files in Volumes", Beta) was NOT available here (G16)** — the Genie space
+  **Configure → Sources → Add** menu offered only **Table / Metric View / SQL function**, no Volume/Files
+  option. **Must be enabled** before the Diversion/HTM PDFs can be attached for document Q&A. Verify before
+  the onsite.
 - Metric views require **DBR 17.2+**; AI Functions (`ai_query`) + Genie Agents + AI/BI dashboards + Apps were all available here.
+
+## Genie-on-Volumes: which volume → which Genie Agent (once the Beta is enabled)
+Attach via the Genie space → **Configure → Sources → Add → (Volume/Files)**:
+| Volume (in `slhs_test1`) | Genie Agent | Space ID |
+|---|---|---|
+| `med_diversion.policy_docs` (4 policy/SOP PDFs) | **Medication Diversion Investigation** | `01f1ac6ddfb815d48bae4fa7fd6df6b0` |
+| `htm.vendor_bulletins` (4 vendor EOL PDFs) | **HTM Medical Equipment & Replacement Planning** | `01f1ac71937418af98ba72f0f4976b5d` |
+| `clinical.clinical_notes_files` (CKD note .txt) — optional | **CKD Patient Registry** | `01f1ac630be811fab2a17b766a235f5d` |
+| `huddle.transcripts` (transcript .txt) — optional (already extracted to a table) | **Care Team Daily Patient Huddle** | `01f1ac76e7bd1f249e8ed27613b69f7c` |
+**Status: documented but NOT testable here** until Genie-on-Volumes is enabled (see G16).
 
 ---
 
@@ -40,6 +53,7 @@ Confirmed in this workspace while testing:
 | G13 | Some Genie-space builds end on an **"Accept all" gate** — the space doesn't register until clicked. | Watch for the approval gate after a space build; click Accept all. |
 | G14 | **`ai_forecast()` is a PREVIEW (Predictive AI Functions) and was DISABLED here.** Genie Code fell back to Python statsmodels. | Enable **Settings > Previews > Predictive AI Functions** for the native `ai_forecast` path. Belongs in the required-previews doc. |
 | G15 | Genie Code may **save to an existing table name and overwrite it** (Huddle extraction wrote to `transcript_extractions`), or save to the `default` schema (G11). | Tell it the exact target table/schema; check whether the name already exists before running.
+| G16 | **Genie-on-Volumes not available** — the Genie space Configure→Sources→Add menu offered only Table/Metric View/SQL function (no Volume/Files). | It's a Beta needing enablement; can't attach the PDF volumes for doc Q&A until then. Verify enablement before the onsite. |
 
 ---
 
