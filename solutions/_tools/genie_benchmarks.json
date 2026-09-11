@@ -1,0 +1,33 @@
+{
+  "_note": "Benchmark question set for the 4 workshop Genie Agents. space_id must be refreshed after the agents are (re)built - get the current ids from solutions/DEPLOYED.md. expect_all = tokens (numbers or names) that must all appear in the answer or returned rows. Numbers are compared comma-insensitively. Run: GENIE_PROFILE=stlukes-workshop uv run --with requests --python 3.11 python solutions/_tools/genie_benchmark.py solutions/_tools/genie_benchmarks.json",
+  "ckd": {
+    "space_id": "01f1ac630be811fab2a17b766a235f5d",
+    "questions": [
+      {"question": "How many patients are in the registry?", "expect_all": ["2000"]},
+      {"question": "How many patients actually have CKD?", "expect_all": ["1524"]},
+      {"question": "How many care gap patients are there?", "expect_all": ["518"]},
+      {"question": "How many high risk patients are there?", "expect_all": ["230"]}
+    ]
+  },
+  "diversion": {
+    "space_id": "01f1ac6ddfb815d48bae4fa7fd6df6b0",
+    "questions": [
+      {"question": "How many medication transactions are there in total?", "expect_all": ["45000"]},
+      {"question": "Which 5 employees have the most unwitnessed waste events?", "expect_all": ["Allison Hill", "Angie Henderson", "Noah Rhodes", "Daniel Wagner"]}
+    ]
+  },
+  "htm": {
+    "space_id": "01f1ac71937418af98ba72f0f4976b5d",
+    "questions": [
+      {"question": "How many medical assets are there?", "expect_all": ["8000"]},
+      {"question": "How many assets have support ending in 2026?", "expect_all": ["1388"]}
+    ]
+  },
+  "huddle": {
+    "space_id": "01f1ac76e7bd1f249e8ed27613b69f7c",
+    "questions": [
+      {"question": "How many patients are in the huddle?", "expect_all": ["18"]},
+      {"question": "How many patients were assigned to a team member who was not the optimal one?", "expect_all": ["20"]}
+    ]
+  }
+}
