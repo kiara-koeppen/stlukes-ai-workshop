@@ -37,10 +37,10 @@ Confirmed in this workspace while testing:
 Attach via the Genie space → **Configure → Sources → Add → (Volume/Files)**:
 | Volume (in `slhs_test1`) | Genie Agent | Space ID |
 |---|---|---|
-| `med_diversion.policy_docs` (4 policy/SOP PDFs) | **Medication Diversion Investigation** | `01f1ac6ddfb815d48bae4fa7fd6df6b0` |
-| `htm.vendor_bulletins` (4 vendor EOL PDFs) | **HTM Medical Equipment & Replacement Planning** | `01f1ac71937418af98ba72f0f4976b5d` |
-| `clinical.clinical_notes_files` (CKD note .txt) — optional | **CKD Patient Registry** | `01f1ac630be811fab2a17b766a235f5d` |
-| `huddle.transcripts` (transcript .txt) — optional (already extracted to a table) | **Care Team Daily Patient Huddle** | `01f1ac76e7bd1f249e8ed27613b69f7c` |
+| `med_diversion.policy_docs` (4 policy/SOP PDFs) | **Medication Diversion Investigation** | `01f1ae08af291854b6ef6533875dbc4c` |
+| `htm.vendor_bulletins` (4 vendor EOL PDFs) | **HTM Medical Equipment & Replacement Planning** | `01f1ae0af6301d0bac8ece3fabbeeff6` |
+| `clinical.clinical_notes_files` (CKD note .txt) — optional | **CKD Patient Registry** | `01f1ae0626f41e31a517eb3aac920de1` |
+| `huddle.transcripts` (transcript .txt) — optional (already extracted to a table) | **Care Team Daily Patient Huddle** | `01f1ae0d9a7a12cc8de27ca6e5c7ed86` |
 **Status: documented but NOT testable here** until Genie-on-Volumes is enabled (see G16).
 
 ---
@@ -114,7 +114,7 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
 - **✅ CKD AI function COMPLETE** — extraction table verified (99.2% precision) + undocumented-worklist
   analysis demonstrated. Persisting the worklist is a one-prompt follow-up if a saved table is wanted.
 
-### Genie Agent — `01f1ac630be811fab2a17b766a235f5d` ("CKD Patient Registry")
+### Genie Agent — `01f1ae0626f41e31a517eb3aac920de1` ("CKD Patient Registry")
 - **Prompt:** *"create a genie space on the ckd data so clinicians can ask questions about kidney patients
   in plain english. use the ckd patient registry and the ckd_patient_registry_metrics metric view we built"*
   → **Result: ✅ Genie Code created a working Genie space** over the registry + metric view, and even
@@ -123,7 +123,7 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   **230**, generating `SELECT MEASURE(\`high_risk_patients\`) FROM …ckd_patient_registry_metrics`. Correct.
 - **✅ CKD Genie Agent COMPLETE** — created + live-verified from one natural prompt.
 
-### AI/BI dashboard — `01f1ac6418471f72859f9b559fac875f` ("CKD Patient Registry Dashboard")
+### AI/BI dashboard — `01f1ae0678c51786af5d28272ca942ea` ("CKD Patient Registry Dashboard")
 - **Prompt:** *"build an ai/bi dashboard on the ckd_patient_registry_metrics metric view. show total ckd
   patients, care gap patients and high risk patients as big number tiles, plus care gap patients broken
   down by ckd stage and by assigned provider"*
@@ -213,7 +213,7 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
 - **✅ Diversion AI function COMPLETE (attempt 2).** The lesson (G11): grounding in the real view + "do not
   invent" + naming the real id/name columns is what flips it from fabrication to correct.
 
-### Genie Agent — `01f1ac6ddfb815d48bae4fa7fd6df6b0` ("Medication Diversion Investigation")
+### Genie Agent — `01f1ae08af291854b6ef6533875dbc4c` ("Medication Diversion Investigation")
 - **Prompt:** *"create a genie space for our diversion analysts to ask about suspicious medication activity
   in plain english. use slhs_test1.med_diversion.medication_activity, the diversion_metrics view, and the
   employee_risk_narratives table"*
@@ -222,7 +222,7 @@ the intended asset-by-asset, review-and-iterate loop (not a one-shot spec prompt
   returned **Allison Hill, Angie Henderson, Noah Rhodes, Daniel Wagner** (the real planted diverters), with
   correct SQL (`event_type='waste' AND witness_id IS NULL`). ✅ **Diversion Genie Agent COMPLETE.**
 
-### AI/BI dashboard — `01f1ac6e25fb1675926f2696701b2b56` ("Diversion Metrics Dashboard")
+### AI/BI dashboard — `01f1ae08ebaa11129ce693930df2c58c` ("Diversion Metrics Dashboard")
 - **Prompt:** *"build an ai/bi dashboard on the diversion_metrics view. tiles for total transactions, waste
   events, and unwitnessed waste events; a bar chart of the top 10 employees by unwitnessed waste events;
   and off-shift events by unit"* (then a follow-up to add the widgets — see gotcha below).
@@ -273,7 +273,7 @@ dashboard all built via Genie Code + verified; app per the established finding.
   preview** if you want the native `ai_forecast` path (goes in the required-previews doc). ✅ **HTM AI
   function COMPLETE (via fallback; ai_forecast pending preview enablement).**
 
-### Genie Agent — `01f1ac71937418af98ba72f0f4976b5d` ("HTM Medical Equipment & Replacement Planning")
+### Genie Agent — `01f1ae0af6301d0bac8ece3fabbeeff6` ("HTM Medical Equipment & Replacement Planning")
 - **Prompt:** *"create a genie space for our biomed / HTM team to ask about medical equipment and
   replacement planning in plain english. use slhs_test1.htm.medical_assets, the medical_assets_metrics
   view, and the corrective_wo_forecast table"*
@@ -284,7 +284,7 @@ dashboard all built via Genie Code + verified; app per the established finding.
 - **Verified live (Conversation API):** *"how many assets have support ending in 2026?"* → **1,388** (correct
   SQL `MEASURE(asset_count) WHERE support_end_year=2026`). ✅ **HTM Genie Agent COMPLETE.**
 
-### AI/BI dashboard — `01f1ac7373d7193bb7283d462b86b943` ("HTM Capital Equipment Replacement Planning")
+### AI/BI dashboard — `01f1ae0b2f8a1d5783e004ed18a123b3` ("HTM Capital Equipment Replacement Planning")
 - **Prompt:** *"build an ai/bi dashboard on the medical_assets_metrics view. tiles for total assets, total
   replacement cost, and assets with support ending this year; a bar chart of assets ending support this
   year by facility; and total replacement cost by manufacturer"*
@@ -327,7 +327,7 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
   overwrote — name collisions can silently replace a table.) ✅ **Huddle AI function COMPLETE** (native
   `ai_extract`, unstructured→structured, grounded).
 
-### Genie Agent — `01f1ac76e7bd1f249e8ed27613b69f7c` ("Care Team Daily Patient Huddle")
+### Genie Agent — `01f1ae0d9a7a12cc8de27ca6e5c7ed86` ("Care Team Daily Patient Huddle")
 - **Prompt:** *"create a genie space for our care teams to ask about the daily patient huddle in plain
   english. use slhs_test1.huddle.patient_demographics, physician_inputs, the physician_inputs_metrics view,
   and transcript_extractions"*
@@ -335,7 +335,7 @@ Genie Agent, dashboard all built via Genie Code + verified; app per the establis
 - **Verified live (Conversation API):** *"how many patients were assigned to a team member who wasn't the
   optimal one?"* → **20** (correct `MEASURE(non_optimal_assignment_count)`). ✅ **Huddle Genie Agent COMPLETE.**
 
-### AI/BI dashboard — `01f1ac773dd21f4783074ddab6746e3a` ("Care Team Huddle - Provider & Assignment Analytics")
+### AI/BI dashboard — `01f1ae0df4911a33975000df2239ed85` ("Care Team Huddle - Provider & Assignment Analytics")
 - **Prompt:** *"build an ai/bi dashboard on the physician_inputs_metrics view. tiles for patient count,
   average patient complexity score, and non-optimal assignment count; a bar chart of patient count by
   provider name; and non-optimal assignments by assigned team member"*

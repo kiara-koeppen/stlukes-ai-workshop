@@ -1,0 +1,74 @@
+{
+  "pass": 10,
+  "total": 10,
+  "results": {
+    "ckd": [
+      {
+        "question": "How many patients are in the registry?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "How many patients actually have CKD?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "How many care gap patients are there?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "How many high risk patients are there?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      }
+    ],
+    "diversion": [
+      {
+        "question": "How many medication transactions are there in total?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "Which 5 employees have the most unwitnessed waste events?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      }
+    ],
+    "htm": [
+      {
+        "question": "How many medical assets are there?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "How many assets have support ending in 2026?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      }
+    ],
+    "huddle": [
+      {
+        "question": "How many patients are in the huddle?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      },
+      {
+        "question": "How many patients were assigned to a team member who was not the optimal one?",
+        "pass": true,
+        "status": "COMPLETED",
+        "missing": []
+      }
+    ]
+  }
+}

@@ -88,6 +88,8 @@ def main():
     host, tok = get_host(), get_token()
     results, n_pass, n_total = {}, 0, 0
     for key, spec in bench.items():
+        if key.startswith("_") or not isinstance(spec, dict):
+            continue
         if only and key != only:
             continue
         space_id = spec["space_id"]

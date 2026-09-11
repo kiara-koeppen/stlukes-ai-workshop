@@ -35,10 +35,10 @@ below is verified (built + tested), not aspirational.
 ## Workspace + reference assets
 - **FEVM workspace (facilitator reference):** https://adb-447340683886633.13.azuredatabricks.net
   (catalog `slhs_test1`). All 4 use cases were built here with Genie Code and verified.
-- **Genie Agents:** CKD `01f1ac630be811fab2a17b766a235f5d` · Diversion `01f1ac6ddfb815d48bae4fa7fd6df6b0`
-  · HTM `01f1ac71937418af98ba72f0f4976b5d` · Huddle `01f1ac76e7bd1f249e8ed27613b69f7c`.
-- **AI/BI Dashboards:** CKD `01f1ac6418471f72859f9b559fac875f` · Diversion `01f1ac6e25fb1675926f2696701b2b56`
-  · HTM `01f1ac7373d7193bb7283d462b86b943` · Huddle `01f1ac773dd21f4783074ddab6746e3a`.
+- **Genie Agents:** CKD `01f1ae0626f41e31a517eb3aac920de1` · Diversion `01f1ae08af291854b6ef6533875dbc4c`
+  · HTM `01f1ae0af6301d0bac8ece3fabbeeff6` · Huddle `01f1ae0d9a7a12cc8de27ca6e5c7ed86`.
+- **AI/BI Dashboards:** CKD `01f1ae0678c51786af5d28272ca942ea` · Diversion `01f1ae08ebaa11129ce693930df2c58c`
+  · HTM `01f1ae0b2f8a1d5783e004ed18a123b3` · Huddle `01f1ae0df4911a33975000df2239ed85`.
 - The polished working **Databricks Apps live in a separate facilitator workspace (kk_test), not FEVM.**
 
 ## What each use case builds (verified numbers)
